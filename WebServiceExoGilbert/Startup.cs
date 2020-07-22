@@ -9,6 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using WebServiceExoGilbert.Models;
+using WebServiceExoGilbert.Services;
 
 namespace WebServiceExoGilbert
 {
@@ -25,11 +28,13 @@ namespace WebServiceExoGilbert
         public void ConfigureServices(IServiceCollection services)
         {
             // requires using Microsoft.Extensions.Options
-            services.Configure<BookstoreDatabaseSettings>(
-                Configuration.GetSection(nameof(BookstoreDatabaseSettings)));
+            services.Configure<FlickrDatabaseSettings>(
+                Configuration.GetSection(nameof(FlickrDatabaseSettings)));
 
-            services.AddSingleton<IBookstoreDatabaseSettings>(sp =>
-                sp.GetRequiredService<IOptions<BookstoreDatabaseSettings>>().Value);
+            services.AddSingleton<FlickrDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<FlickrDatabaseSettings>>().Value);
+
+            services.AddSingleton<PhotoService>();
 
             services.AddControllers();
         }
